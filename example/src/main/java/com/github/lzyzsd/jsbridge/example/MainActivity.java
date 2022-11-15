@@ -79,12 +79,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		webView.addJavascriptInterface(new MainJavascriptInterface(webView.getCallbacks(), webView), "WebViewJavascriptBridge");
 		webView.setGson(new Gson());
-		webView.loadUrl("file:///android_asset/demo.html");
+		webView.loadUrl("file:///android_asset/app.html");
         User user = new User();
         Location location = new Location();
-        location.address = "SDU";
+        location.address = "Pudu";
         user.location = location;
-        user.name = "大头鬼";
+        user.name = "zayfen";
 
         webView.callHandler("functionInJs", new Gson().toJson(user), new OnBridgeCallback() {
             @Override

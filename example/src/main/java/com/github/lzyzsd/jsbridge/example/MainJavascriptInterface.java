@@ -1,5 +1,6 @@
 package com.github.lzyzsd.jsbridge.example;
 
+import android.os.Build;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 
@@ -28,7 +29,7 @@ public class MainJavascriptInterface extends BridgeWebView.BaseJavascriptInterfa
 
     @Override
     public String send(String data) {
-        return "it is default response";
+        return data + "zayfen";
     }
 
 
@@ -36,5 +37,12 @@ public class MainJavascriptInterface extends BridgeWebView.BaseJavascriptInterfa
     public void submitFromWeb(String data, String callbackId) {
         Log.d("MainJavascriptInterface", data + ", callbackId: " + callbackId + " " + Thread.currentThread().getName());
         mWebView.sendResponse("submitFromWeb response", callbackId);
+    }
+
+    @JavascriptInterface
+    public void getSystemInfo(String data, String callbackId) {
+        Log.d("MainJavascriptInterfce", data + " ;  callbackId: " + callbackId);
+        String response = Build.BRAND + "; " + Build.MODEL + "; " + Build.BOARD + "; " + Build.USER;
+        mWebView.sendResponse(response, callbackId);
     }
 }

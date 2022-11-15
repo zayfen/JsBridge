@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>App</title>
+</head>
+<body>
+    <section id="log">
+        <h2>Log</h2><button id="button">GetSystemInfo</button>
+        <ul id="log-list"></ul>
+    </section>
+    <script>
+
+         function log(text) {
+             var logList = document.getElementById('log-list')
+             var li = document.createElement("LI")
+             var txt = document.createTextNode(text)
+             li.appendChild(txt)
+             logList.appendChild(li)
+         }
+
+         function getSystemInfo() {
+             window.WebViewJavascriptBridge.callHandler(
+                 'getSystemInfo',
+                 {'param': 'OS'},
+                 function(responseData) {
+                     log(responseData)
+                 }
+             )
+         }
+
+         var button = document.getElementById("button")
+         button.addEventListener('click', function(event) {
+             getSystemInfo()
+         })
+
+         function connectWebViewJavascriptBridge(callback) {
+             if (window.WebViewJavascriptBridge && WebViewJavascriptBridge.inited) {
+                 return calllback(window.WebViewJavascriptBridge)
+             }
+
+             document.addEventListener('WebViewJavascriptBridgeReady', function () {
+                 callback(window.WebViewJavascriptBridge)
+             }, false)
+         }
+
+         connectWebViewJavascriptBridge(function (bridge) {
+             console.log("bridge: ", bridge)
+
+             bridge.init(function (message, responseCallback) {
+                 log("onInited: " + message)
+                 if (responseCallback) {
+                     responseCallback('Javascript init compeleted!')
+                 }
+             })
+
+             // register functions that native can call
+             bridge.registerHandler("functionInJs", function (data, responseCallback) {
+                 console.info("data: ", data)
+                 log(`functionInJs(${data})`)
+                 if (responseCallback) {
+                     responseCallback("response from functionInJs()")
+                 }
+             })
+         })
+    </script>
+</body>
+</html>
